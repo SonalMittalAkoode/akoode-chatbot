@@ -1,0 +1,54 @@
+/*
+  SdHero entrance animations — CSS-driven (not framer-motion) on purpose.
+
+  The hero <h1> is the LCP element on mobile (the hero image is hidden below
+  lg). When the entrance was done with framer-motion's initial/animate, the
+  heading was server-rendered at opacity:0 and only became visible after JS
+  hydration — pushing mobile LCP past 8s on throttled connections.
+
+  Driving the reveal with CSS means it plays from the first paint, before any
+  JS runs, so the LCP heading paints immediately. The headline itself uses a
+  slide-only reveal (opacity stays 1) so it is never invisible.
+*/
+
+@keyframes sdHeroSlideUp {
+  from { transform: translateY(24px); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes sdHeroFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sdHeroFadeRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* LCP heading: visible immediately (opacity untouched), only slides up. */
+.sd-hero-h1 {
+  animation: sdHeroSlideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Supporting copy + CTAs: fade-up with the original stagger. */
+.sd-hero-reveal {
+  animation: sdHeroFadeUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.sd-hero-reveal--d1 { animation-delay: 0.10s; }
+.sd-hero-reveal--d2 { animation-delay: 0.22s; }
+
+/* Desktop hero image (hidden below lg, so irrelevant to mobile LCP). */
+.sd-hero-image-reveal {
+  animation: sdHeroFadeRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-hero-h1,
+  .sd-hero-reveal,
+  .sd-hero-reveal--d1,
+  .sd-hero-reveal--d2,
+  .sd-hero-image-reveal {
+    animation: none;
+  }
+}

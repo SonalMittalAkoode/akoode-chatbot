@@ -1,0 +1,739 @@
+@import "tailwindcss";
+@import "react-toastify/dist/ReactToastify.css";
+/* Rebuild Trigger */
+
+/* Underline CMS-authored anchors inside industry pages.
+   Targets only <a> tags without a className (TipTap/Quill emit class-less anchors),
+   so React/Next.js Link components keep their existing styles. */
+.industry-page a:where(:not([class])) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: inherit;
+}
+.industry-page a:where(:not([class])):hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Custom Scrollbar Utilities */
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+  }
+
+  .custom-scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .custom-scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Remove native select option styling */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+    /* Remove default arrow */
+  }
+}
+
+/* Thank-you page: gradient text shine animation */
+@keyframes textShine {
+  100% { background-position: 200% center; }
+}
+
+/* Media strip infinite marquee */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee-scroll 55s linear infinite;
+  }
+}
+
+:root {
+  --background: #fcfdfc;
+  --foreground: #171717;
+  --Main-Color: linear-gradient(90deg, #474972 0%, #585c9c 100%);
+  --ztc-bg-bg-2: #25d366; /* WhatsApp green – used by floating button */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: var(--font-geist-mono);
+  --font-figtree: var(--font-figtree);
+  --font-satisfy: var(--font-satisfy);
+  --font-dancing: var(--font-dancing-script);
+  --animate-text-shine: textShine 4s linear infinite;
+
+  @keyframes textShine {
+    from {
+      background-position: 0% center;
+    }
+
+    to {
+      background-position: 200% center;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(-50%);
+  }
+
+  50% {
+    transform: translateY(-60%);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* WhatsApp floating button – pulse ring */
+@keyframes pulse-border {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 40s linear infinite;
+}
+
+
+/* SWING */
+
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(6deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-6deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-swing {
+  animation: swing 5s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.blog-body,
+.blog-intro {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #333;
+}
+
+@media (min-width: 768px) {
+  .blog-body,
+  .blog-intro {
+    font-size: 17px;
+    line-height: 1.8;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-body,
+  .blog-intro {
+    font-size: 18px;
+  }
+}
+
+.blog-body * {
+  color: #333 !important;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif !important;
+}
+
+.blog-body h1,
+.blog-body h2,
+.blog-body h3,
+.blog-body h4,
+.blog-body h5,
+.blog-body h6 {
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  margin-top: 1.5em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.blog-body h2 {
+  font-size: 1.25rem !important;
+}
+
+.blog-body h3 {
+  font-size: 1.1rem !important;
+}
+
+.blog-body h4 {
+  font-size: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  .blog-body h2 {
+    font-size: 1.45rem !important;
+  }
+  .blog-body h3 {
+    font-size: 1.25rem !important;
+  }
+  .blog-body h4 {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-body h2 {
+    font-size: 1.6rem !important;
+  }
+  .blog-body h3 {
+    font-size: 1.35rem !important;
+  }
+  .blog-body h4 {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* Paragraphs */
+.blog-body p {
+  margin-bottom: 1.2em !important;
+}
+
+/* Unordered lists */
+.blog-body ul {
+  list-style-type: disc !important;
+  padding-left: 30px !important;
+  display: block !important;
+  margin-bottom: 1.2em !important;
+}
+
+/* Ordered lists */
+.blog-body ol {
+  list-style-type: decimal !important;
+  padding-left: 30px !important;
+  display: block !important;
+  margin-bottom: 1.2em !important;
+}
+
+.blog-body li {
+  display: list-item !important;
+  margin-bottom: 0.4em !important;
+}
+
+/* Links */
+.blog-body a {
+  color: #474972 !important;
+  text-decoration: underline !important;
+}
+
+.blog-intro a {
+  color: #474972 !important;
+  text-decoration: underline !important;
+}
+
+.blog-body a:hover {
+  color: #3a3c63 !important;
+}
+
+.blog-intro a:hover {
+  color: #3a3c63 !important;
+}
+
+/* Tables — responsive on small screens */
+.blog-body table {
+  display: block !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  border-collapse: collapse !important;
+  margin-bottom: 1.5em !important;
+  font-size: 15px !important;
+  white-space: nowrap !important;
+}
+
+.blog-body th,
+.blog-body td {
+  border: 1px solid #e2e8f0 !important;
+  padding: 10px 14px !important;
+  text-align: left !important;
+  white-space: normal !important;
+  min-width: 100px !important;
+}
+
+.blog-body th {
+  background: #f4f6ff !important;
+  font-weight: 600 !important;
+}
+
+@media (max-width: 640px) {
+  .blog-body table {
+    font-size: 13px !important;
+  }
+  .blog-body th,
+  .blog-body td {
+    padding: 8px 10px !important;
+    min-width: 90px !important;
+  }
+}
+
+/* Blockquote */
+.blog-body blockquote {
+  border-left: 4px solid #474972 !important;
+  padding: 10px 20px !important;
+  margin: 1.5em 0 !important;
+  background: #f4f6ff !important;
+  font-style: italic !important;
+}
+
+.blog-body code {
+  background: #f1f3ff !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.9em !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important;
+}
+
+/* Preformatted code blocks (inserted via the editor's "Code Block" button).
+   Override the .blog-body * font-family rule so code renders monospace, and
+   preserve original whitespace/line breaks so YAML/JSON/shell stay readable. */
+.blog-body pre,
+.blog-body pre *,
+.blog-intro pre,
+.blog-intro pre * {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important;
+}
+.blog-body pre,
+.blog-intro pre {
+  background: #f4f6ff !important;
+  color: #1a1a1a !important;
+  padding: 16px 18px !important;
+  border-radius: 8px !important;
+  overflow-x: auto !important;
+  font-size: 0.9em !important;
+  line-height: 1.6 !important;
+  white-space: pre !important;
+  margin: 16px 0 !important;
+  border: 1px solid #e3e7f7 !important;
+  /* Thin scrollbar */
+  scrollbar-width: thin !important;
+  scrollbar-color: #c4caea #f4f6ff !important;
+}
+.blog-body pre::-webkit-scrollbar,
+.blog-intro pre::-webkit-scrollbar {
+  height: 1px !important;
+  width: 1px !important;
+}
+.blog-body pre::-webkit-scrollbar-track,
+.blog-intro pre::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+.blog-body pre::-webkit-scrollbar-thumb,
+.blog-intro pre::-webkit-scrollbar-thumb {
+  background: #c4caea !important;
+  border-radius: 3px !important;
+}
+.blog-body pre::-webkit-scrollbar-thumb:hover,
+.blog-intro pre::-webkit-scrollbar-thumb:hover {
+  background: #9aa3d4 !important;
+}
+.blog-body pre code,
+.blog-intro pre code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  white-space: inherit !important;
+}
+
+.blog-body,
+.blog-intro {
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.blog-body img,
+.blog-intro img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 8px !important;
+  display: block;
+  margin: 1em auto !important;
+}
+
+/* Image alignment coming from Tiptap (e.g. <p style="text-align: center">) */
+.blog-body [style*="text-align: center"] img,
+.blog-intro [style*="text-align: center"] img {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.blog-body img[style*="text-align: center"],
+.blog-intro img[style*="text-align: center"] {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.blog-body [style*="text-align: left"] img,
+.blog-intro [style*="text-align: left"] img {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.blog-body img[style*="text-align: left"],
+.blog-intro img[style*="text-align: left"] {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.blog-body [style*="text-align: right"] img,
+.blog-intro [style*="text-align: right"] img {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+.blog-body img[style*="text-align: right"],
+.blog-intro img[style*="text-align: right"] {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+.blog-body [style*="text-align: justify"] img,
+.blog-intro [style*="text-align: justify"] img {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.blog-body img[style*="text-align: justify"],
+.blog-intro img[style*="text-align: justify"] {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+.custom-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.custom-list li {
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 10px;
+  list-style: none;
+  color: #444;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.custom-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 22px;
+  height: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='14' viewBox='0 0 22 14' fill='none'%3E%3Cpath d='M11.3909 14C11.0558 14 10.8325 13.8667 10.6091 13.6L5.91878 8C5.47208 7.46667 5.47208 6.66667 5.91878 6.13333C6.36548 5.6 7.03553 5.6 7.48223 6.13333L11.3909 10.8L20.1015 0.4C20.5482 -0.133333 21.2183 -0.133333 21.665 0.4C22.1117 0.933333 22.1117 1.73333 21.665 2.26667L12.1726 13.6C12.0609 13.8667 11.7259 14 11.3909 14Z' fill='%2364758B'/%3E%3Cpath d='M5.80711 14C5.47208 14 5.24873 13.8667 5.02538 13.6L0.335025 8C-0.111675 7.46667 -0.111675 6.66667 0.335025 6.13333C0.781726 5.6 1.45178 5.6 1.89848 6.13333L6.58883 11.7333C7.03553 12.2667 7.03553 13.0667 6.58883 13.6C6.47716 13.8667 6.14213 14 5.80711 14ZM11.7259 7.06667C11.3909 7.06667 11.1675 6.93333 10.9442 6.66667C10.4975 6.13333 10.4975 5.33333 10.9442 4.8L14.5178 0.4C14.9645 -0.133333 15.6345 -0.133333 16.0812 0.4C16.5279 0.933333 16.5279 1.73333 16.0812 2.26667L12.5076 6.66667C12.2843 6.93333 12.0609 7.06667 11.7259 7.06667Z' fill='%2364758B'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* TOC inner nav scrollbar */
+.toc-nav::-webkit-scrollbar {
+  width: 3px;
+}
+.toc-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.toc-nav::-webkit-scrollbar-thumb {
+  background: rgba(71, 73, 114, 0.25);
+  border-radius: 10px;
+}
+.toc-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 73, 114, 0.55);
+}
+
+/* Admin panel — override admin template CSS color cascade for page headings and body text */
+.breadcrumb_title,
+.breadcrumb_content h2,
+.breadcrumb_content h3,
+.breadcrumb_content p,
+.my_dashboard_review h2,
+.my_dashboard_review h3,
+.my_dashboard_review h4,
+.my_dashboard_review label,
+.my_dashboard_review p {
+  color: #40415D !important;
+}
+
+
+/* ── Services-by-city keyframe animations ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes up   { to { opacity: 1; transform: translateY(0); } }
+@keyframes scrl {
+  0%   { opacity:0; transform:scaleY(0); transform-origin:top; }
+  50%  { opacity:1; transform:scaleY(1); }
+  100% { opacity:0; transform:scaleY(0); transform-origin:bottom; }
+}
+@keyframes ticker { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@keyframes probFloat1 { 0%,100%{transform:translate(0,0) rotate(-2deg)} 50%{transform:translate(6px,-8px) rotate(1deg)} }
+@keyframes probFloat2 { 0%,100%{transform:translate(0,0) rotate(1deg)} 50%{transform:translate(-5px,7px) rotate(-2deg)} }
+@keyframes probFloat3 { 0%,100%{transform:translate(0,0) rotate(-1deg)} 50%{transform:translate(8px,5px) rotate(2deg)} }
+@keyframes solPulse { 0%,100%{box-shadow:0 0 0 0 rgba(108,111,168,0)} 50%{box-shadow:0 0 0 6px rgba(108,111,168,.08)} }
+@keyframes arrowPulse { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.15)} }
+@keyframes livepulse { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.5)} 60%{box-shadow:0 0 0 6px rgba(74,222,128,0)} }
+@keyframes scrollX {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scrollX 20s linear infinite;
+}
+
+
+.animate-tab {
+  animation: fadeUp 0.35s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.translate-z-0 {
+  transform: translate3d(0,0,0);
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ── AI Development hero orb (app/country/_components/ai/AiLocationHero.jsx) ── */
+
+/* Three things keep this from reading as a heartbeat, which a single
+   0/50/100 in-and-out scale always does:
+     1. many keyframes at irregular positions, so there is no beat to
+        lock onto;
+     2. scaleX and scaleY move independently, so the orb jellies rather
+        than zooming;
+     3. the two bands run on 11s and 13.7s — deliberately non-harmonic,
+        so they drift in and out of phase and the combined motion does
+        not visibly repeat for minutes.
+   The shell still swings ~3x wider than the core, so the dot field goes
+   on opening and closing; it just never does it on a pulse. */
+@keyframes aiOrbJitterCore {
+  0%   { transform: translate3d(0, 0, 0)          scale(1.000, 1.000); }
+  9%   { transform: translate3d(0.4%, -0.3%, 0)   scale(1.008, 0.995); }
+  21%  { transform: translate3d(-0.3%, 0.5%, 0)   scale(0.994, 1.010); }
+  34%  { transform: translate3d(0.2%, 0.2%, 0)    scale(1.011, 1.003); }
+  47%  { transform: translate3d(-0.5%, -0.2%, 0)  scale(0.997, 0.992); }
+  58%  { transform: translate3d(0.3%, 0.4%, 0)    scale(1.005, 1.012); }
+  70%  { transform: translate3d(-0.2%, -0.5%, 0)  scale(1.012, 0.998); }
+  83%  { transform: translate3d(0.5%, 0.1%, 0)    scale(0.995, 1.006); }
+  92%  { transform: translate3d(-0.4%, 0.3%, 0)   scale(1.004, 0.994); }
+  100% { transform: translate3d(0, 0, 0)          scale(1.000, 1.000); }
+}
+@keyframes aiOrbJitterShell {
+  0%   { transform: translate3d(0, 0, 0)          scale(1.010, 1.010); opacity: 0.93; }
+  13%  { transform: translate3d(-0.6%, 0.4%, 0)   scale(1.038, 1.016); opacity: 1.00; }
+  26%  { transform: translate3d(0.5%, 0.6%, 0)    scale(1.004, 1.041); opacity: 0.95; }
+  39%  { transform: translate3d(0.7%, -0.5%, 0)   scale(1.030, 0.998); opacity: 1.00; }
+  52%  { transform: translate3d(-0.4%, -0.7%, 0)  scale(0.996, 1.028); opacity: 0.92; }
+  64%  { transform: translate3d(0.6%, 0.3%, 0)    scale(1.044, 1.012); opacity: 0.99; }
+  77%  { transform: translate3d(-0.7%, 0.5%, 0)   scale(1.008, 1.036); opacity: 0.96; }
+  89%  { transform: translate3d(0.3%, -0.6%, 0)   scale(1.026, 1.002); opacity: 1.00; }
+  100% { transform: translate3d(0, 0, 0)          scale(1.010, 1.010); opacity: 0.93; }
+}
+/* The band is the mask surface, and anything painted outside it is
+   masked away — so at 1:1 with the layout box the turning orb got its
+   top and bottom sliced flat (the artwork is 482 wide but only 435
+   tall, so a quarter turn needs more height than the box has). The band
+   is therefore blown out to 150% and centred on the layout box, which
+   leaves ~120px of clearance on every side at full size — more than the
+   shell's 1.085 peak can reach. The layout box itself is untouched, so
+   the Figma spacing below the orb does not move.
+   mask-repeat must also be pinned: the default is repeat, and a tiled
+   radial gradient would stamp ghost rings out in that new clearance. */
+.ai-orb-band {
+  position: absolute;
+  left: -25%; top: -25%; width: 150%; height: 150%;
+  pointer-events: none;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;   mask-size: 100% 100%;
+}
+/* Stops are x0.6667 of the 28%/58% pair tuned against the old 1:1 box:
+   the gradient is a farthest-corner ellipse, so growing the box grew
+   its radii by the same 1.5, and the crossfade has to land back on the
+   same place in the artwork. */
+.ai-orb-band--core {
+  -webkit-mask-image: radial-gradient(#000 0%, #000 18.67%, transparent 38.67%);
+          mask-image: radial-gradient(#000 0%, #000 18.67%, transparent 38.67%);
+}
+.ai-orb-band--shell {
+  -webkit-mask-image: radial-gradient(transparent 18.67%, #000 38.67%);
+          mask-image: radial-gradient(transparent 18.67%, #000 38.67%);
+}
+/* Back down to the layout box: 66.6667% of the 150% band. Auto margins
+   against inset:0 centre it without a transform, which matters because
+   the pulse already owns this element's transform. */
+.ai-orb-core, .ai-orb-shell {
+  position: absolute; inset: 0; margin: auto;
+  width: 66.6667%; height: 66.6667%;
+  object-fit: contain;
+}
+/* The spin lives on its own element between the mask and the image:
+   one element can only run one transform, and the pulse already owns
+   the image's. Nesting also keeps the rotation inside the static mask,
+   so the depth bands hold their seam while the artwork turns. Both
+   bands share one duration — a lumpy blob whose two halves rotated at
+   different speeds would visibly come apart. */
+.ai-orb-spin {
+  position: absolute; inset: 0;
+  animation: aiOrbTumble 60s linear infinite;
+  will-change: transform;
+}
+/* The full 360 stays in Z, because that is the only axis a flat image
+   can turn through without collapsing to a line at 90deg. The X/Y tilts
+   drift to a different pair at every keyframe, so the axis reads as
+   wandering rather than fixed. They cap at 16deg: cos(16deg) is 0.96, so
+   the foreshortening never becomes a visible squash. */
+@keyframes aiOrbTumble {
+  0%   { transform: perspective(900px) rotateX(  0deg) rotateY(  0deg) rotateZ(  0deg); }
+  20%  { transform: perspective(900px) rotateX( 14deg) rotateY(-10deg) rotateZ( 72deg); }
+  40%  { transform: perspective(900px) rotateX( -8deg) rotateY( 16deg) rotateZ(144deg); }
+  60%  { transform: perspective(900px) rotateX( 12deg) rotateY( 11deg) rotateZ(216deg); }
+  80%  { transform: perspective(900px) rotateX(-15deg) rotateY(-13deg) rotateZ(288deg); }
+  100% { transform: perspective(900px) rotateX(  0deg) rotateY(  0deg) rotateZ(360deg); }
+}
+/* linear, not ease-in-out: an eased curve settles at every keyframe,
+   which is exactly the rhythmic beat being avoided. With this many
+   closely-spaced keyframes at tiny amplitudes, constant velocity reads
+   as continuous drift. */
+.ai-orb-core, .ai-orb-shell {
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.ai-orb-core  { animation-name: aiOrbJitterCore;  animation-duration: 11s; }
+.ai-orb-shell { animation-name: aiOrbJitterShell; animation-duration: 13.7s; }
+@media (prefers-reduced-motion: reduce) {
+  .ai-orb-core, .ai-orb-shell, .ai-orb-spin { animation: none; opacity: 1; transform: none; }
+}
+
+/* Digital Transformation hero — energy sweep over the network artwork.
+   The band is additively blended and masked by the artwork's luminance, so it
+   only brightens pixels that are already lit: the rails and their spark points
+   light up in turn as it travels, without the CSS needing to know where any of
+   them are. */
+.dt-flow {
+  mix-blend-mode: plus-lighter;
+}
+.dt-flow-band {
+  background: linear-gradient(
+    90deg,
+    rgba(169, 182, 255, 0) 0%,
+    rgba(169, 182, 255, 0.45) 35%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(169, 182, 255, 0.45) 65%,
+    rgba(169, 182, 255, 0) 100%
+  );
+  animation: dtFlowSweep 3.8s linear infinite;
+}
+@keyframes dtFlowSweep {
+  /* Starts fully off the left edge and ends fully off the right, so the sweep
+     enters and leaves rather than appearing mid-image. */
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(calc(100% / 0.38)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dt-flow { display: none; }
+}

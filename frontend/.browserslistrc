@@ -1,0 +1,8 @@
+# Target modern browsers only to avoid legacy polyfills (Array.at, flat, Object.fromEntries, etc.)
+# and improve mobile PageSpeed / LCP
+chrome >= 111
+edge >= 111
+firefox >= 111
+safari >= 16.4
+not dead
+not op_mini all

@@ -1,0 +1,41 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+	<title>lockup</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m55.5 18.6l-22.5-12.8v52.6l9-5.2v-14.8l6.8 3.9-0.1-10.1-6.7-3.9v-5.9l13.5 7.9z"/>
+		</clipPath>
+		<linearGradient id="g1" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(55.2,0,0,52.9,6.4,32.05)">
+			<stop offset="0" stop-color="#ff6f00"/>
+			<stop offset="1" stop-color="#ffa800"/>
+		</linearGradient>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m8.5 18.6l22.5-12.8v52.6l-9-5.2v-30.8l-13.5 7.9z"/>
+		</clipPath>
+		<linearGradient id="g2" x2="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(55.2,0,0,52.9,6.1,32.05)">
+			<stop offset="0" stop-color="#ff6f00"/>
+			<stop offset="1" stop-color="#ffa800"/>
+		</linearGradient>
+	</defs>
+	<style>
+		.s0 { fill: url(#g1) } 
+		.s1 { fill: url(#g2) } 
+	</style>
+	<g>
+		<g>
+			<g id="Clip-Path" clip-path="url(#cp1)">
+				<g>
+					<path class="s0" d="m6.4 5.6h55.2v52.9h-55.2z"/>
+				</g>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<g id="Clip-Path" clip-path="url(#cp2)">
+				<g>
+					<path class="s1" d="m6.1 5.6h55.2v52.9h-55.2z"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

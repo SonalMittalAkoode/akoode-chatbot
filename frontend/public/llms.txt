@@ -1,0 +1,32 @@
+# Akoode Technologies
+
+> Akoode Technologies is an AI and software development company based in Gurugram, India and Oklahoma, USA, delivering AI integration, custom software, mobile app development, and digital transformation services. This file guides AI agents and LLMs on accessing and using content from akoode.com.
+
+Akoode permits summarization, RAG/indexing, and attributed quoting of public content. AI model training, full-content scraping, and redistribution without consent are restricted — see the full policy below.
+
+## Policy
+
+- [AI Content Usage Policy](https://www.akoode.com/ai-usage-policy): Full terms covering permitted/restricted uses, attribution requirements, and AI training licensing contact
+
+## Company
+
+- [Homepage](https://www.akoode.com): Akoode Technologies — AI and software development company in Gurugram, India and the USA
+- [Services](https://www.akoode.com/services): Overview of AI, software, mobile, web, and digital transformation services
+- [Case Studies](https://www.akoode.com/case-studies): Real-world AI and software development case studies across industries
+- [Blog](https://www.akoode.com/blog): Articles and insights on AI, software development, and digital strategy
+- [Contact](https://www.akoode.com/contact-us): Get in touch with Akoode's team
+
+## Key Services
+
+- [Software Development](https://www.akoode.com/services/software-development): Custom software development tailored to business workflows and growth goals
+- [Artificial Intelligence](https://www.akoode.com/services/artificial-intelligence): AI solutions including automation, predictive insights, and generative AI
+- [Mobile App Development](https://www.akoode.com/services/mobile-app-development): Native and cross-platform mobile app development services
+- [Web Development](https://www.akoode.com/services/web-development): Custom web development using modern frameworks and tech stacks
+- [eCommerce Development](https://www.akoode.com/services/ecommerce-development): End-to-end eCommerce store development across major platforms
+- [Blockchain Development](https://www.akoode.com/services/blockchain-development): Smart contracts, decentralized apps, and blockchain consulting
+- [Staff Augmentation](https://www.akoode.com/services/staff-augmentation): Flexible hiring of vetted developers, engineers, and AI specialists
+- [Digital Transformation](https://www.akoode.com/services/digital-transformation): Legacy system modernization, workflow automation, enterprise integration, and AI-ready platform builds
+
+## Optional
+
+- [info@akoode.com](mailto:info@akoode.com): Contact for AI training access, enterprise licensing, or partnerships

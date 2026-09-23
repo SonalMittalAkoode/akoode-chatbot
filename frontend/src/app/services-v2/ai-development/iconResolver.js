@@ -1,0 +1,93 @@
+// Icon resolver for the AI Development template.
+// Resolves BOTH:
+//   1. Admin IconPicker keys (Fi* / Lu*) from the shared adminIconMap — used by CMS data.
+//   2. The lucide-react keys used by the static aiData preview.
+// Admin keys win when present; otherwise we fall back to the local lucide set.
+
+import { ICON_MAP as ADMIN_ICONS } from "@/utils/adminIconMap";
+import {
+  Star,
+  TrendingUp,
+  Layers,
+  Globe,
+  Code2,
+  Gauge,
+  Building2,
+  RefreshCw,
+  ShieldCheck,
+  Cpu,
+  Atom,
+  Map,
+  Settings,
+  Users,
+  Box,
+  Award,
+  Trophy,
+  Calendar,
+  PieChart,
+  Search,
+  Target,
+  Rocket,
+  PenLine,
+  Brain,
+  Bot,
+  Database,
+  Eye,
+  MessageSquare,
+  Workflow,
+  Network,
+  LayoutGrid,
+  LineChart,
+  CheckCircle2,
+  Briefcase,
+  ShoppingCart,
+  BarChart3,
+  Share2,
+  FileSearch,
+} from "lucide-react";
+
+const LUCIDE_ICONS = {
+  Star,
+  TrendingUp,
+  Layers,
+  Globe,
+  Code2,
+  Gauge,
+  Building2,
+  RefreshCw,
+  ShieldCheck,
+  Cpu,
+  Atom,
+  Map,
+  Settings,
+  Users,
+  Box,
+  Award,
+  Trophy,
+  Calendar,
+  PieChart,
+  Search,
+  Target,
+  Rocket,
+  PenLine,
+  Brain,
+  Bot,
+  Database,
+  Eye,
+  MessageSquare,
+  Workflow,
+  Network,
+  LayoutGrid,
+  LineChart,
+  CheckCircle2,
+  Briefcase,
+  ShoppingCart,
+  BarChart3,
+  Share2,
+  FileSearch,
+};
+
+export const resolveIcon = (name) =>
+  (name && (ADMIN_ICONS[name] || LUCIDE_ICONS[name])) || null;
+
+export default resolveIcon;

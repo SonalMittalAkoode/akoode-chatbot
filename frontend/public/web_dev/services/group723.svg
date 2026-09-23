@@ -1,0 +1,33 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="540" height="540" viewBox="0 0 540 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 723">
+<g id="Ellipse 16" filter="url(#filter0_f_0_32)">
+<circle cx="270" cy="270" r="200" transform="rotate(180 270 270)" fill="url(#paint0_linear_0_32)"/>
+</g>
+<mask id="mask0_0_32" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="70" y="70" width="400" height="400">
+<circle id="Ellipse 17" cx="270" cy="270" r="200" transform="rotate(180 270 270)" fill="url(#paint1_linear_0_32)"/>
+</mask>
+<g mask="url(#mask0_0_32)">
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_32" x="0" y="0" width="540" height="540" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="35" result="effect1_foregroundBlur_0_32"/>
+</filter>
+<linearGradient id="paint0_linear_0_32" x1="270" y1="70" x2="270" y2="470" gradientUnits="userSpaceOnUse">
+<stop stop-color="#050734"/>
+<stop offset="0.25" stop-color="#1E269D" stop-opacity="0.8"/>
+<stop offset="0.5" stop-color="#373FB1" stop-opacity="0.9"/>
+<stop offset="0.75" stop-color="#7993D0"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_32" x1="270" y1="70" x2="270" y2="470" gradientUnits="userSpaceOnUse">
+<stop stop-color="#050734"/>
+<stop offset="0.25" stop-color="#1E269D" stop-opacity="0.8"/>
+<stop offset="0.5" stop-color="#373FB1" stop-opacity="0.9"/>
+<stop offset="0.75" stop-color="#7993D0"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+</defs>
+</svg>

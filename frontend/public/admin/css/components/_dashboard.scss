@@ -1,0 +1,43 @@
+.sidebar-menu {
+    .header {
+        display: flex;
+        align-items: center;
+        img {
+            margin-right: 10px;
+        }
+    }
+}
+.recent_job_activity .grid ul {
+    display: flex;
+    align-items: flex-start;
+}
+
+// Date input visibility
+input[type="date"] {
+    &::-webkit-calendar-picker-indicator {
+        opacity: 1;
+        cursor: pointer;
+    }
+}
+
+// Statistics cards hover effect
+.ff_one {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    will-change: transform;
+    
+    &:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+    }
+}
+
+// More specific selector to ensure it works
+.dashbord .ff_one,
+.our-dashbord .ff_one {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    
+    &:hover {
+        transform: scale(1.05) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+    }
+}

@@ -1,0 +1,113 @@
+/* ============================================================================
+   Industries page — unified typography system (everything BELOW the hero).
+   One scale, reused by every section. These tokens control ONLY font family,
+   size, weight, line-height and letter-spacing/transform — colors stay inline
+   so the existing palette is untouched. Unlayered (no @layer) so a token always
+   wins over a leftover Tailwind size utility.
+   ============================================================================ */
+
+.ind-h2,
+.ind-lead,
+.ind-card-title,
+.ind-body,
+.ind-caption,
+.ind-label,
+.ind-stat,
+.ind-num,
+.ind-btn {
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Mobile-first sizes mirror the Mobile App Development (MAD) services scale.
+   The ≥1024px (lg) value of every token equals the previous desktop size, so
+   the desktop design is unchanged — only the smaller-screen steps follow MAD. */
+
+/* Section title — "The Services We Deliver…", "The Way We Work…", etc. */
+.ind-h2 {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+}
+
+/* Lead / intro paragraph that sits directly under a section title */
+.ind-lead {
+  font-weight: 400; 
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+
+/* Card / item title (H3) */
+.ind-card-title {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+
+/* Card / supporting body copy */
+.ind-body {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Small captions / fine print */
+.ind-caption {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Small uppercase labels */
+.ind-label {
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Statistic value — 40%, 60%, 180+ */
+.ind-stat {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Process number — 01, 02, 03, 04 */
+.ind-num {
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* Button / inline link label */
+.ind-btn {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ≥640px (sm) — MAD intermediate step */
+@media (min-width: 640px) {
+  .ind-h2 { font-size: 28px; line-height: 2rem; }
+  .ind-lead { font-size: 15px; }
+  .ind-card-title { font-size: 20px; }
+  .ind-body { font-size: 15px; }
+  .ind-caption { font-size: 13px; }
+  .ind-label { font-size: 12px; }
+  .ind-stat { font-size: 34px; }
+  .ind-num { font-size: 40px; }
+  .ind-btn { font-size: 15px; }
+}
+
+/* ≥1024px (lg) — equals the previous desktop sizes (design unchanged) */
+@media (min-width: 1024px) {
+  .ind-lead { font-size: 16px; }
+  .ind-btn { font-size: 16px; }
+}

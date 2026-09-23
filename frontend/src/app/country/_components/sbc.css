@@ -1,0 +1,708 @@
+@keyframes sbc-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+@keyframes sbc-glow-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%       { opacity: 0.80; transform: scale(1.08); }
+}
+@keyframes sbc-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-18px) rotate(1.5deg); }
+  66%       { transform: translateY(-8px) rotate(-1deg); }
+}
+
+.sbc-page {
+  font-family: var(--font-figtree), system-ui, sans-serif;
+  color: #252747;
+  background: #f4f2f8;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+.sbc-page h1,.sbc-page h2,.sbc-page h3,.sbc-page h4,.sbc-page h5 {
+  font-family: var(--font-figtree), system-ui, sans-serif;
+  color: #18193e;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+  margin: 0;
+  text-wrap: balance;
+}
+/* Beat default #18193e when headings use Tailwind text-white on dark cards / strips */
+.sbc-page h1.text-white,
+.sbc-page h2.text-white,
+.sbc-page h3.text-white,
+.sbc-page h4.text-white,
+.sbc-page h5.text-white {
+  color: #fff;
+  text-shadow: 0 0 40px rgba(160, 140, 255, 0.22);
+}
+.sbc-page p { color: #2a2d52; margin: 0; }
+.sbc-page a { color: inherit; text-decoration: none; }
+.sbc-page button { font-family: inherit; cursor: pointer; }
+
+/* Centered section title + subtitle (all sections except hero). --single-title: one line xl+ at current type scale. */
+.sbc-section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 1.5rem;
+}
+.sbc-section-head p {
+  text-wrap: pretty;
+}
+.sbc-section-title {
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: balance;
+}
+.sbc-section-subtitle {
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+  text-wrap: pretty;
+}
+.sbc-section--dark .sbc-section-subtitle,
+.sbc-surface--dark-mesh .sbc-section-subtitle {
+  color: rgba(245, 244, 255, 0.96);
+}
+
+/* Inline links inside any rich-text content rendered through <RichText> */
+.sbc-rich a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: inherit;
+}
+.sbc-rich a:hover {
+  text-decoration-thickness: 2px;
+}
+/* Inside the rich block, strip default <p> margins that TipTap emits so the
+   parent's typography rhythm stays intact. */
+.sbc-rich p { margin: 0; }
+.sbc-rich p + p { margin-top: 0.6em; }
+/* Prevent .sbc-page p { color: #2a2d52 } from overriding white text on dark card backgrounds.
+   Covers both cases: HTML-authored content (p nested inside a .sbc-rich wrapper) and
+   plain-text content (RichText renders the text directly as p.sbc-rich, no wrapper). */
+.sbc-page .sbc-rich p,
+.sbc-page p.sbc-rich { color: inherit !important; }
+
+/* Card overlay title on dark photo — richer contrast version */
+.sbc-gurugram-card-title-gradient {
+  background-image: linear-gradient(90deg, #7784C5 0%, #B7BEED 35%, #9d8ff5 65%, #7683C5 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+/* Must beat `.sbc-page p { color: #2a2d52 }` — use with `.sbc-body` for /services-matched type scale.
+   RichText renders this as a bare <p> for plain text, but as a <div> wrapping
+   real <p> tags whenever the CMS content contains HTML markup — cover both. */
+.sbc-page p.sbc-gurugram-card-body,
+.sbc-page .sbc-gurugram-card-body,
+.sbc-page .sbc-gurugram-card-body p {
+  color: rgba(248, 250, 252, 0.99);
+  font-weight: 400;
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.9),
+    0 1px 2px rgba(0, 0, 0, 1);
+}
+
+.sbc-page h3.sbc-gurugram-card-title-gradient {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Why Gurugram — light section heading: Deep Indigo brand tones */
+.sbc-gurugram-title-gradient {
+  background-image: linear-gradient(90deg, #3730a3 0%, #4338ca 50%, #312e81 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.sbc-why-gurugram-section .sbc-gurugram-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -20px 48px rgba(0, 0, 0, 0.55);
+}
+
+.sbc-why-gurugram-section.sbc-section--light {
+  background: linear-gradient(165deg, #f8f9ff 0%, #f3f2fa 42%, #f5f4fc 100%);
+}
+
+/* Last phrase of section headings — Refined to avoid "white shine" and stay brand-consistent */
+.sbc-heading-accent {
+  background-image: linear-gradient(90deg, #3730a3 0%, #4338ca 50%, #312e81 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+}
+/* On dark mesh / dark sections — richer contrast without over-shining */
+.sbc-section--dark .sbc-heading-accent,
+.sbc-surface--dark-mesh .sbc-heading-accent {
+  background-image: linear-gradient(90deg, #7784C5 0%, #6366f1 50%, #4f5581 100%);
+}
+
+.sbc-container {
+  width: min(1240px, 100% - 64px);
+  margin-inline: auto;
+}
+.sbc-reading { max-width: 800px; }
+
+/* ─── SECTION BASES ─────────────────────────────────────────── */
+.sbc-section { position: relative; padding: 80px 0; }
+
+/* DARK sections — deep indigo → midnight navy with violet glow mesh */
+.sbc-section--dark {
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%, #1f2336 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, #130f25 0%, transparent 60%),
+    #130f25;
+}
+.sbc-section--dark h1,
+.sbc-section--dark h2,
+.sbc-section--dark h3,
+.sbc-section--dark h4 {
+  color: #fff;
+  text-shadow: 0 0 40px rgba(160, 140, 255, 0.22);
+}
+.sbc-section--dark p  { color: rgba(245,244,255,0.96); }
+
+/* LIGHT sections — neutral lavender (no purple glow orbs) */
+.sbc-section--light {
+  background: linear-gradient(160deg, #f5f3fa 0%, #ebe9f4 40%, #f2eff8 100%);
+}
+
+/* Light-band h2 only: navy body + horizontal purple→blue on accent spans (matches reference) */
+.sbc-page .sbc-section--light h2:not(.text-white) {
+  color: #14153d;
+}
+/* Light-band h2 only: navy body + consistent dark gradient on accents */
+.sbc-page .sbc-section--light h2:not(.text-white) .sbc-heading-accent,
+.sbc-page .sbc-section--light h2:not(.text-white) .sbc-gurugram-title-gradient {
+  background-image: linear-gradient(90deg, #3730a3 0%, #4338ca 50%, #312e81 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* MID sections */
+.sbc-section--mid {
+  background: linear-gradient(135deg, #ebe7f3 0%, #e4e0eb 50%, #ebe8f2 100%);
+}
+
+/* PAPER sections */
+.sbc-section--paper {
+  background: linear-gradient(150deg, #f0edf7 0%, #e9e6f1 55%, #f1eefb 100%);
+}
+
+/* Same violet mesh as .sbc-section--dark — for full-width strips not using .sbc-section */
+.sbc-surface--dark-mesh {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%, #1f2336 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, #130f25 0%, transparent 60%),
+    #130f25;
+}
+.sbc-surface--dark-mesh::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(200, 190, 255, 0.018) 2px,
+      rgba(200, 190, 255, 0.018) 4px
+    );
+  opacity: 0.4;
+}
+
+/* Light surfaces only: keep blobs/grain/shimmer off (dark hero + dark sections keep originals) */
+.sbc-page .sbc-section--light .sbc-glow-blob,
+.sbc-page .sbc-section--mid .sbc-glow-blob,
+.sbc-page .sbc-section--paper .sbc-glow-blob {
+  display: none !important;
+}
+.sbc-page .sbc-section--light .sbc-grain,
+.sbc-page .sbc-section--mid .sbc-grain,
+.sbc-page .sbc-section--paper .sbc-grain {
+  display: none;
+}
+.sbc-page .sbc-section--light::after,
+.sbc-page .sbc-section--mid::after,
+.sbc-page .sbc-section--paper::after {
+  opacity: 0;
+}
+
+/* ─── GLOW BLOBS (decorative, pointer-events:none) ──────────── */
+.sbc-glow-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+  animation: sbc-glow-pulse 6s ease-in-out infinite;
+  will-change: opacity, transform;
+  z-index: 0;
+}
+.sbc-glow-blob--tl {
+  top: -80px; left: -60px;
+  width: 420px; height: 320px;
+  background: radial-gradient(circle, rgba(120,90,230,0.35) 0%, transparent 70%);
+  animation-delay: 0s;
+}
+.sbc-glow-blob--br {
+  bottom: -80px; right: -60px;
+  width: 360px; height: 280px;
+  background: radial-gradient(circle, rgba(80,60,200,0.30) 0%, transparent 70%);
+  animation-delay: -3s;
+}
+.sbc-glow-blob--center {
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px; height: 260px;
+  background: radial-gradient(ellipse, rgba(100,80,220,0.18) 0%, transparent 65%);
+  animation-delay: -1.5s;
+}
+/* Light-section blobs — bigger & more opaque for visibility on pale backgrounds */
+.sbc-light-blob--tl {
+  top: -80px; left: -60px;
+  width: 520px; height: 380px;
+  background: radial-gradient(circle, rgba(140,115,255,0.32) 0%, transparent 65%);
+  animation: sbc-glow-pulse 7s ease-in-out infinite;
+  animation-delay: -2s;
+}
+.sbc-light-blob--br {
+  bottom: -80px; right: -60px;
+  width: 440px; height: 340px;
+  background: radial-gradient(circle, rgba(100,80,240,0.26) 0%, transparent 65%);
+  animation: sbc-glow-pulse 8s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+/* ─── EYEBROW ───────────────────────────────────────────────── */
+.sbc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #28295a;
+}
+.sbc-section--dark .sbc-eyebrow { color: rgba(245,244,255,0.98); letter-spacing: 0.18em; }
+.sbc-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.sbc-eyebrow .bar { width: 28px; height: 1px; background: currentColor; opacity: 0.85; }
+
+/* ─── TYPE SCALE — matches /services (Figtree, semibold headings) ─── */
+/* Hero h1: text-4xl md:text-[42px] font-semibold */
+.sbc-h-display {
+  font-size: 36px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+@media (min-width: 768px) {
+  .sbc-h-display { font-size: 42px; line-height: 1.12; }
+}
+/* Hero copy stack on dark — scoped so .sbc-page p { color } does not override */
+.sbc-section--dark .sbc-hero-subtitle {
+  font-family: var(--font-figtree), system-ui, sans-serif;
+  font-size: clamp(1.2rem, 2.8vw, 1.5rem);
+  line-height: 1.35;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #f5f4ff;
+  text-shadow: 0 0 40px rgba(180, 170, 255, 0.28);
+  margin: 0;
+  padding-bottom: 0.25rem;
+}
+.sbc-section--dark .sbc-hero-lead {
+  margin: 0;
+  font-weight: 500;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: rgba(250, 249, 255, 0.96);
+  letter-spacing: -0.012em;
+}
+@media (min-width: 768px) {
+  .sbc-section--dark .sbc-hero-lead {
+    font-size: 1.125rem;
+    line-height: 1.62;
+  }
+}
+.sbc-section--dark .sbc-hero-body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 400;
+  color: rgba(232, 230, 252, 0.88);
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) {
+  .sbc-section--dark .sbc-hero-body {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Primary section h2 — CustomSoftware / CRM / service detail blocks */
+.sbc-h1 {
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+@media (min-width: 640px) {
+  .sbc-h1 { font-size: 26px; line-height: 1.25; }
+}
+@media (min-width: 768px) {
+  .sbc-h1 { font-size: 30px; line-height: 1.22; }
+}
+@media (min-width: 1024px) {
+  .sbc-h1 { font-size: 34px; line-height: 1.2; }
+}
+
+/* Secondary section h2 — text-lg sm:text-xl md ~22px, lg 24px */
+.sbc-h2 {
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+@media (min-width: 640px) {
+  .sbc-h2 { font-size: 20px; }
+}
+@media (min-width: 768px) {
+  .sbc-h2 { font-size: 22px; line-height: 1.25; }
+}
+@media (min-width: 1024px) {
+  .sbc-h2 { font-size: 24px; line-height: 1.22; }
+}
+
+/* Card / list h3 — Service1SectionArea-style titles */
+.sbc-h3 {
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 640px) {
+  .sbc-h3 { font-size: 18px; line-height: 1.3; }
+}
+
+/* Intro / hero sub — ~text-lg md:text-[18px] */
+.sbc-body-lg {
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 400;
+}
+@media (min-width: 768px) {
+  .sbc-body-lg { font-size: 18px; }
+}
+
+/* Body — text-[14px] sm:text-[15px] md:text-[16px] text-[#505169] on /services */
+.sbc-body {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+@media (min-width: 640px) {
+  .sbc-body { font-size: 15px; line-height: 1.62; }
+}
+@media (min-width: 768px) {
+  .sbc-body { font-size: 16px; line-height: 1.625; }
+}
+
+.sbc-body-sm {
+  font-size: 14px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* ─── BUTTONS ───────────────────────────────────────────────── */
+.sbc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-family: var(--font-figtree), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  border: 0;
+  cursor: pointer;
+  transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+  will-change: transform;
+}
+.sbc-btn--primary,
+.sbc-btn--cta {
+  background: linear-gradient(180deg, #7784c5 0%, #495074 50%, #4f5581 100%);
+  color: #fff;
+  font-weight: 700;
+  border: 1.5px solid #7683c5;
+  box-shadow: 0 4px 20px -4px rgba(15, 18, 40, 0.45);
+}
+.sbc-btn--primary:hover,
+.sbc-btn--cta:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 28px -6px rgba(15, 18, 40, 0.5);
+}
+/* .sbc-page sets `a { color: inherit }` (body copy color); override for pill CTAs */
+.sbc-page a.sbc-btn--primary,
+.sbc-page a.sbc-btn--cta {
+  color: #fff;
+}
+/* `.sbc-page a { color: inherit }` (specificity 0,1,1) outranks Tailwind's
+   `.text-white` (0,1,0), so hero breadcrumb links inherit the dark page color and
+   vanish. Re-assert white here (and the hover accent) with higher specificity. */
+.sbc-page nav[aria-label="Breadcrumb"] a {
+  color: #fff;
+}
+.sbc-page nav[aria-label="Breadcrumb"] a:hover {
+  color: #b7beed;
+}
+.sbc-btn--ghost { background: transparent; color: inherit; border: 1px solid currentColor; }
+.sbc-btn--ghost:hover { background: rgba(255,255,255,0.06); }
+/* On dark hero/sections, .sbc-page body color would make ghost CTAs invisible */
+.sbc-section--dark .sbc-btn--ghost {
+  color: #f8f7ff;
+  border: 1.5px solid rgba(248, 247, 255, 0.45);
+  font-weight: 700;
+}
+.sbc-section--dark .sbc-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(248, 247, 255, 0.7);
+}
+.sbc-btn--light {
+  background: linear-gradient(135deg, #f0effe 0%, #e8e5fb 100%);
+  color: #18193e;
+  box-shadow: 0 2px 12px rgba(100,80,200,0.12);
+}
+.sbc-btn--light:hover { background: #fff; box-shadow: 0 4px 20px rgba(100,80,200,0.2); }
+
+/* ─── GRAIN / TEXTURE OVERLAY ───────────────────────────────── */
+.sbc-grain {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(180,160,255,0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(120,100,230,0.10) 0%, transparent 40%),
+    radial-gradient(circle at 50% 10%, rgba(200,180,255,0.07) 0%, transparent 35%);
+}
+
+/* Subtle noise-like shimmer stripe (purely CSS, no img) */
+.sbc-section--dark::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(200,190,255,0.018) 2px,
+      rgba(200,190,255,0.018) 4px
+    );
+  opacity: 0.4;
+}
+.sbc-section--light::after,
+.sbc-section--mid::after,
+.sbc-section--paper::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(140,120,200,0.012) 3px,
+      rgba(140,120,200,0.012) 5px
+    );
+  opacity: 0.35;
+}
+
+/* ─── NARRATIVE THREAD ──────────────────────────────────────── */
+.sbc-thread {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(58,60,99,0.15);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+.sbc-thread__fill {
+  position: absolute; inset: 0 0 auto 0;
+  width: 100%; height: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(100,80,220,0.8) 12%, rgba(80,60,200,0.9) 88%, transparent 100%);
+}
+
+/* ─── REVEAL ANIMATIONS ─────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(50px); transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: .08s; }
+.reveal.d2 { transition-delay: .16s; }
+.reveal.d3 { transition-delay: .24s; }
+.reveal.d4 { transition-delay: .32s; }
+.reveal.d5 { transition-delay: .40s; }
+.reveal.d6 { transition-delay: .48s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .sbc-glow-blob, .sbc-light-blob--tl, .sbc-light-blob--br { animation: none; }
+}
+
+/* ─── CHOOSEUS — marquee & rating animations ─────────────────── */
+@keyframes marquee-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.anim-marquee-left  { animation: marquee-left  18s linear infinite; }
+.anim-marquee-right { animation: marquee-right 22s linear infinite; }
+
+@keyframes bar-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.rate-bar {
+  transform-origin: left;
+  animation: bar-fill 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes num-pop {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.85); }
+  100% { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+.rate-num { animation: num-pop 0.6s ease-out both; }
+
+@keyframes star-glow {
+  0%, 100% { filter: drop-shadow(0 0 0px currentColor); }
+  50%       { filter: drop-shadow(0 0 4px currentColor); }
+}
+.star-glow { animation: star-glow 2.4s ease-in-out infinite; }
+
+/* ─── MOBILE CARD SCROLL STRIP ───────────────────────────────── */
+.sbc-scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.sbc-scroll-hide::-webkit-scrollbar { display: none; }
+
+/* Applied to grid containers — forces flex scroll on < 640 px   */
+@media (max-width: 639px) {
+  .sbc-card-strip {
+    display: flex !important;
+    gap: 16px !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 18px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .sbc-card-strip::-webkit-scrollbar { display: none; }
+  .sbc-card-strip > * {
+    flex-shrink: 0 !important;
+    width: 80vw !important;
+    scroll-snap-align: center;
+  }
+}
+
+/* ─── ENGAGEMENT MODELS: desktop re-center Popular card ─────── */
+/* DOM order is Popular(1), FixedCost(2), StaffAug(3) for mobile-first scroll.
+   On desktop (≥1024px) we reorder visually: FixedCost | Popular | StaffAug */
+@media (min-width: 1024px) {
+  .engagement-models-grid > div:nth-child(1) { order: 2; } /* Popular → center */
+  .engagement-models-grid > div:nth-child(2) { order: 1; } /* Fixed Cost → left */
+  .engagement-models-grid > div:nth-child(3) { order: 3; } /* Staff Aug → right */
+}
+
+/* ─── RESPONSIVE: SECTION PADDING + TYPE SCALE ──────────────── */
+@media (max-width: 767px) {
+  .sbc-section    { padding: 56px 0; }
+  .sbc-container  { width: min(1240px, 100% - 40px); }
+}
+
+/* ─── RESPONSIVE: HERO + STATSBAR ───────────────────────────── */
+/* Hero: tighter vertical rhythm so stats bar stays in first viewport */
+.sbc-section.sbc-hero-section {
+  padding-top: 72px;
+  padding-bottom: 40px;
+}
+@media (min-width: 768px) {
+  .sbc-section.sbc-hero-section {
+    padding-top: 88px;
+    padding-bottom: 48px;
+  }
+}
+@media (min-width: 1024px) {
+  .sbc-section.sbc-hero-section {
+    padding-top: 92px;
+    padding-bottom: 52px;
+  }
+}
+.sbc-statsbar-float { margin-top: -110px; margin-bottom: -110px; }
+
+/* Embedded hero stats: continuous horizontal marquee */
+.sbc-stats-marquee-wrap {
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+.sbc-stats-marquee-wrap:hover .sbc-stats-marquee-track {
+  animation-play-state: paused;
+}
+.sbc-stats-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: sbc-stats-marquee-scroll 34s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sbc-stats-marquee-track {
+    animation: none;
+  }
+  .sbc-stats-marquee-wrap {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+@keyframes sbc-stats-marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.sbc-engagement-featured { transform: translateY(-12px); }
+@media (max-width: 767px) { .sbc-engagement-featured { transform: none; } }
+
+/* ─── MAD template: flat surface ─────────────────────────────
+   Figma (node 1178:2333) specifies a single flat #130e2a for the services
+   section — no mesh, no shimmer. `.sbc-section--dark` bakes two radial
+   gradients into its background and adds a repeating-stripe ::after, which
+   read as a textured/mottled backdrop. This keeps --dark's typography rules
+   (white headings, light body) and only replaces the surface, so it must stay
+   after .sbc-section--dark in this file to win on source order. */
+.sbc-section--flat {
+  background: #130e2a;
+}
+.sbc-section--flat::after {
+  content: none;
+}
