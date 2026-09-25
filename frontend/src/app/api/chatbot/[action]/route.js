@@ -6,12 +6,18 @@ const COOKIE = 'akoode_chat_session';
 async function proxy(request, context) {
   const { action } = await context.params;
   const method = request.method;
-  if (!({ session: ['GET', 'POST', 'DELETE'], message: ['POST'], lead: ['POST'] }[action] || []).includes(method)) return NextResponse.json({ message: 'Not found.' }, { status: 404 });
+  if (!({ session: ['GET', 'POST', 'PATCH', 'DELETE'], message: ['POST'], lead: ['POST'] }[action] || []).includes(method)) return NextResponse.json({ message: 'Not found.' }, { status: 404 });
   if (method !== 'GET' && request.headers.get('origin') !== request.nextUrl.origin) return NextResponse.json({ message: 'Invalid request origin.' }, { status: 403 });
-  if (!process.env.CHATBOT_BACKEND_URL || !process.env.CHATBOT_PROXY_SECRET) return NextResponse.json({ message: 'Chat is not available yet. Please contact the Akoode team.' }, { status: 503 });
+  const backendUrl = process.env.CHATBOT_BACKEND_URL || (process.env.VERCEL === '1' ? 'https://api.akoode.com/chatbot' : '');
+  if (!backendUrl || !process.env.CHATBOT_PROXY_SECRET) return NextResponse.json({ message: 'Chat is not available yet. Please contact the Akoode team.' }, { status: 503 });
   try {
+    const destination = new URL(backendUrl);
+    if (process.env.VERCEL === '1' && (destination.protocol !== 'https:' || /^(localhost|127\.|\[::1\])/.test(destination.hostname))) {
+      console.error('[chatbot] Configure CHATBOT_BACKEND_URL with the deployed HTTPS backend, not localhost.');
+      return NextResponse.json({ message: 'Chat is temporarily unavailable. Please contact the Akoode team.' }, { status: 503 });
+    }
     let body;
-    if (method === 'POST') {
+    if (method === 'POST' || method === 'PATCH') {
       if (!request.headers.get('content-type')?.startsWith('application/json')) return NextResponse.json({ message: 'JSON required.' }, { status: 415 });
       // Bound the stream itself, including requests without Content-Length.
       const reader = request.body?.getReader();
@@ -25,13 +31,15 @@ async function proxy(request, context) {
       body = JSON.stringify(JSON.parse(Buffer.concat(parts).toString('utf8')));
     }
     const token = request.cookies.get(COOKIE)?.value;
-    const upstream = await fetch(`${process.env.CHATBOT_BACKEND_URL.replace(/\/$/, '')}/${action}`, {
+    const upstream = await fetch(`${backendUrl.replace(/\/$/, '')}/${action}`, {
       method, cache: 'no-store', signal: AbortSignal.timeout(45000),
       headers: { 'Content-Type': 'application/json', 'x-chatbot-secret': process.env.CHATBOT_PROXY_SECRET,
         // Configure the deployment ingress to overwrite this header; otherwise all visitors share the safe global limit.
         'x-chatbot-client': createHash('sha256').update(process.env.CHATBOT_TRUST_CLIENT_IP === 'true' ? (request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'global') : 'global').digest('hex'),
         ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body,
     });
+    if (!upstream.ok) console.error(`[chatbot] ${method} ${action}: backend returned HTTP ${upstream.status}.`);
+    if (upstream.status === 404) return NextResponse.json({ message: 'Chat is temporarily unavailable. Please contact the Akoode team.' }, { status: 503 });
     const data = await upstream.json();
     const response = NextResponse.json(action === 'session' && method === 'POST' && upstream.ok ? { started: true } : data, { status: upstream.status, headers: { 'Cache-Control': 'no-store' } });
     if (upstream.headers.has('retry-after')) response.headers.set('Retry-After', upstream.headers.get('retry-after'));
@@ -45,4 +53,4 @@ async function proxy(request, context) {
     return NextResponse.json({ message: 'Chat is temporarily unavailable. Please retry or contact the Akoode team.' }, { status: 503 });
   }
 }
-export { proxy as GET, proxy as POST, proxy as DELETE };
+export { proxy as GET, proxy as POST, proxy as DELETE, proxy as PATCH };

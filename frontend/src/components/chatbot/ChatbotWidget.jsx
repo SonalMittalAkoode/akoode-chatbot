@@ -5,8 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Bot, MessageCircle, X, Send, RotateCcw, ArrowUpRight, BookOpen, Sparkles, ChevronRight, ChevronUp, CalendarDays } from 'lucide-react';
 import styles from './ChatbotWidget.module.css';
-// code done by sonal: begin with a friendly name question before suggesting project topics.
-const greeting = { role: 'assistant', content: "Hi, I'm Akoode's AI assistant. What should I call you?", quickReplies: [] };
+import ChatOnboarding, { onboardingStorageKey } from './ChatOnboarding';
+// Use the onboarding identity before asking for project details.
+function greeting(name = '') {
+  return { role: 'assistant', content: name.trim()
+    ? `Hi ${name.trim()}, I'm Akoode's AI assistant. What would you like to build or explore?`
+    : "Hi, I'm Akoode's AI assistant. What should I call you?", quickReplies: [] };
+}
 // code done by sonal: use real indexed titles, safe URLs and compact expandable reading cards.
 function RelatedPages({ cards = [], sources = [] }) {
   const seen = new Set();
@@ -50,9 +55,12 @@ async function api(action, method = 'GET', body) {
   return data;
 }
 export default function ChatbotWidget() {
+  const [onboardingStep, setOnboardingStep] = useState('user-details');
+  const [onboardingDetails, setOnboardingDetails] = useState({ name: '', email: '', consentAccepted: false, source: '', sourceOther: '' });
+  const [onboarding, setOnboarding] = useState(null);
   const [open, setOpen] = useState(false);
   const [accepted, setAccepted] = useState(false);
-  const [messages, setMessages] = useState([greeting]);
+  const [messages, setMessages] = useState([greeting()]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -67,14 +75,16 @@ export default function ChatbotWidget() {
   const input = useRef(null); const log = useRef(null); const launcher = useRef(null); const panel = useRef(null);
   useEffect(() => { if (open) input.current?.focus(); }, [open, accepted, busy]);
   useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [messages, busy, ready]);
+  useEffect(() => { if (open && onboarding && !accepted) panel.current?.querySelector('button[autofocus], header button')?.focus(); }, [open, onboarding, accepted]);
   function close() { setOpen(false); launcher.current?.focus(); }
   async function start() {
     setBusy(true); setError('');
     try {
       let data;
-      try { data = await api('session'); }
-      catch (e) { if (e.status !== 401) throw e; await api('session', 'POST', { source: `${location.origin}${location.pathname}` }); }
-      setMessages(data?.messages?.length ? [greeting, ...data.messages] : [greeting]);
+      try { data = await api('session'); const updated = await api('session', 'PATCH', { userMetadata: onboarding }); data.draft = updated.draft; }
+      catch (e) { if (e.status !== 401) throw e; await api('session', 'POST', { source: `${location.origin}${location.pathname}`, userMetadata: onboarding }); }
+      const welcome = greeting(data?.draft?.fullName || onboarding?.name);
+      setMessages([welcome, ...(data?.messages || [])]);
       setDraft(data?.draft || {}); setReady(Boolean(data?.ready)); setSubmitted(Boolean(data?.submitted)); setAccepted(true);
     } catch (e) { setError(e.message); }
     finally { setBusy(false); }
@@ -108,8 +118,17 @@ export default function ChatbotWidget() {
   }
   async function reset() {
     setBusy(true); setError('');
-    try { await api('session', 'DELETE'); setAccepted(false); setMessages([greeting]); setDraft({}); setReady(false); setConsent(false); setSubmitted(false); setText(''); setFailedMessage(null); }
-    catch (e) { if (e.status === 401) setAccepted(false); else setError(e.message); }
+    try {
+      try { await api('session', 'DELETE'); }
+      catch (e) { if (e.status !== 401) throw e; }
+      // An expired session is already cleared; both paths restart onboarding.
+      try { sessionStorage.removeItem(onboardingStorageKey); } catch { /* Keep working without storage. */ }
+      setOnboarding(null);
+      setOnboardingStep('user-details');
+      setOnboardingDetails({ name: '', email: '', consentAccepted: false, source: '', sourceOther: '' });
+      setAccepted(false); setMessages([greeting()]); setDraft({}); setReady(false);
+      setConsent(false); setSubmitted(false); setText(''); setFailedMessage(null);
+    } catch (e) { setError(e.message); }
     finally { setBusy(false); }
   }
   function keyboard(event) {
@@ -133,7 +152,7 @@ export default function ChatbotWidget() {
           <button autoFocus type="button" onClick={close} aria-label="Close chat"><X size={22} /></button>
         </div>
       </header>
-      {!accepted ? <div className={styles.intro}>
+      {!onboarding ? <ChatOnboarding onComplete={setOnboarding} step={onboardingStep} setStep={setOnboardingStep} details={onboardingDetails} setDetails={setOnboardingDetails} /> : !accepted ? <div className={styles.intro}>
         <MessageCircle size={36} /><h2>What can we help you build?</h2>
         <p>Explore Akoode’s services and discuss your project with our AI assistant.</p>
         <p className={styles.notice}>Your messages are processed by our AI provider and stored for up to 24 hours. Only share information needed for your enquiry, never passwords or confidential documents. We’ll ask before sharing your contact details and conversation with our sales team.</p>

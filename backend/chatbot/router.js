@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const { Session, Lead, Rate } = require('./models');
 const { answer } = require('./ai');
 const { missingFields, safeSource } = require('./validation');
+const { cleanUserMetadata } = require('./onboarding');
 const router = express.Router();
 const hash = value => crypto.createHash('sha256').update(value).digest('hex');
 router.use(async (req, res, next) => {
@@ -22,9 +23,12 @@ router.use(async (req, res, next) => {
   } catch { res.status(503).json({ message: 'Chat is temporarily unavailable. Please contact our team.' }); }
 });
 router.post('/session', async (req, res) => {
+  let userMetadata;
+  try { userMetadata = cleanUserMetadata(req.body?.userMetadata); }
+  catch (error) { return res.status(400).json({ message: error.message }); }
   try {
     const token = crypto.randomBytes(32).toString('hex');
-    await Session.create({ tokenHash: hash(token), source: safeSource(req.body?.source), expiresAt: new Date(Date.now() + 24 * 3600000) });
+    await Session.create({ userMetadata, draft: { ...(userMetadata?.name && { fullName: userMetadata.name }), ...(userMetadata?.email && { email: userMetadata.email }) }, tokenHash: hash(token), source: safeSource(req.body?.source), expiresAt: new Date(Date.now() + 24 * 3600000) });
     res.json({ token });
   } catch { res.status(503).json({ message: 'Unable to start chat. Please try again.' }); }
 });
@@ -38,6 +42,22 @@ router.use(async (req, res, next) => {
   } catch { res.status(503).json({ message: 'Chat is temporarily unavailable.' }); }
 });
 router.get('/session', (req, res) => res.json({ messages: req.chat.messages, draft: req.chat.draft, ready: req.chat.qualified && !missingFields(req.chat.draft).length, submitted: req.chat.submitted }));
+router.patch('/session', async (req, res) => {
+  let userMetadata;
+  try { userMetadata = cleanUserMetadata(req.body?.userMetadata); }
+  catch (error) { return res.status(400).json({ message: error.message }); }
+  if (!userMetadata) return res.status(400).json({ message: 'Please provide onboarding details.' });
+  try {
+    await Session.updateOne({ _id: req.chat._id }, { $set: { userMetadata } });
+    // Fill missing identity fields only; preserve corrections already made in chat.
+    for (const [field, value] of [['fullName', userMetadata.name], ['email', userMetadata.email]]) {
+      if (value) await Session.updateOne({ _id: req.chat._id, $or: [{ [`draft.${field}`]: { $exists: false } }, { [`draft.${field}`]: { $in: ['', null] } }] }, { $set: { [`draft.${field}`]: value } });
+    }
+    const updated = await Session.findById(req.chat._id);
+    res.json({ updated: true, draft: updated.draft });
+  }
+  catch { res.status(503).json({ message: 'Unable to save onboarding details. Please retry.' }); }
+});
 router.delete('/session', async (req, res) => {
   try { await Session.deleteOne({ _id: req.chat._id }); res.json({ deleted: true }); }
   catch { res.status(503).json({ message: 'Could not clear this chat. Please retry.' }); }

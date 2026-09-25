@@ -1,6 +1,8 @@
+import { deploymentConfig } from './deployment.config.mjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: deploymentConfig(),
 
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion", "react-icons"],
@@ -8,7 +10,7 @@ const nextConfig = {
   },
 
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
   },
 
   // Files under /public are served by Next with `Cache-Control: public,
@@ -28,6 +30,10 @@ const nextConfig = {
         ],
       },
     ];
+  },
+
+  async rewrites() {
+    return [{ source: '/backend-api/:path*', destination: 'https://api.akoode.com/:path*' }];
   },
 
   async redirects() {

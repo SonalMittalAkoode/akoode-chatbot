@@ -13,6 +13,11 @@ chatMessage.add({
 const session = new Schema({
   tokenHash: { type: String, unique: true },
   messages: [chatMessage], source: String,
+  userMetadata: { type: new Schema({
+    name: { type: String, maxlength: 120 }, email: { type: String, maxlength: 254 },
+    acquisitionSource: { type: String, enum: ['facebook', 'instagram', 'google', 'friend_recommendation', 'other', 'skipped'] },
+    acquisitionSourceOther: { type: String, maxlength: 200 }, privacyConsent: Boolean,
+  }, { _id: false }), default: undefined },
   draft: { type: Schema.Types.Mixed, default: {} },
   // code done by sonal: session-only conversation state; lead records and retention stay unchanged.
   conversation: { type: Schema.Types.Mixed, default: {} },

@@ -181,3 +181,29 @@ test('explicit work requests return case studies only; later ordinary replies ha
   response = await request('message', 'POST', { message: 'What should I consider when building a chatbot?' });
   data = await response.json(); assert.equal(data.caseStudiesRequested, false); assert.deepEqual(data.sourceCards, []);
 });
+
+
+test('onboarding metadata attaches to new and existing sessions without changing conversation', async () => {
+  assert.equal((await request('session', 'POST', { userMetadata: { privacyConsent: false } })).status, 400);
+  const userMetadata = { name: 'Visitor', email: 'visitor@example.test', privacyConsent: true, acquisitionSource: 'google' };
+  const created = await request('session', 'POST', { userMetadata });
+  assert.equal(created.status, 200); token = (await created.json()).token;
+  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  let saved = await Session.findOne({ tokenHash }).lean();
+  assert.deepEqual(saved.userMetadata, userMetadata);
+  assert.equal(saved.draft.fullName, 'Visitor');
+  assert.equal(saved.draft.email, 'visitor@example.test');
+  assert.equal((await request('session', 'PATCH', { userMetadata: { privacyConsent: true, email: 'invalid' } })).status, 400);
+  assert.equal((await request('session', 'PATCH', { userMetadata: { privacyConsent: true, acquisitionSource: 'skipped' } })).status, 200);
+  saved = await Session.findOne({ tokenHash }).lean();
+  assert.deepEqual(saved.userMetadata, { privacyConsent: true, acquisitionSource: 'skipped' });
+  assert.equal(saved.messages.length, 0);
+  assert.equal(saved.submitted, false);
+  await Session.updateOne({ tokenHash }, { $set: { 'draft.fullName': 'Corrected name' }, $unset: { 'draft.email': 1 } });
+  const updated = await request('session', 'PATCH', { userMetadata });
+  assert.equal(updated.status, 200);
+  const restored = await updated.json();
+  assert.equal(restored.draft.fullName, 'Corrected name');
+  assert.equal(restored.draft.email, 'visitor@example.test');
+  assert.equal((await (await request('session')).json()).draft.fullName, 'Corrected name');
+});

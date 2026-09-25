@@ -117,3 +117,17 @@
 .launcherHint { position: absolute; bottom: calc(100% + 12px); right: 12px; padding: 9px 13px; border-radius: 13px 13px 3px 13px; background: #efebfff0; border: 1px solid #c9beff; color: #3b345d; font-size: 11px; line-height: 1.4; box-shadow: 0 5px 22px #31284f26; pointer-events: none; }
 @media (max-width: 480px) { .header { padding: 12px 14px; }.headerIdentity strong { font-size: 14px; }.launcher { min-height: 54px; padding: 6px 12px 6px 6px; }.launcherAvatar { width: 38px; height: 38px; } }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .panel { background: #1d2036; } }
+
+/* Onboarding uses the existing content, button and selectable-card surfaces. */
+.onboarding { min-height: 0; overflow-x: hidden; overscroll-behavior: contain; }
+.onboardingField { display: grid; gap: 8px; font-size: 12px; }
+.onboardingField input { min-width: 0; width: 100%; box-sizing: border-box; padding: 12px 13px; border: 1px solid #b8afff38; border-radius: 10px; background: #aaa0e50b; color: #f0ecff; font: inherit; font-size: 14px; }
+.onboardingField input::placeholder { color: #aba4c8; }
+.onboardingChoice { display: flex; align-items: flex-start; gap: 10px; }
+.onboardingChoice input { flex-shrink: 0; margin-top: 4px; accent-color: #a194ec; }
+.onboardingChoice a { color: #c7c1ff; }
+.onboardingSources { display: grid; gap: 9px; border: 0; padding: 0; margin: 0; min-width: 0; }
+.onboardingTextButton { align-self: center; padding: 6px 10px; border: 0; background: transparent; color: #c7c1ff; font: inherit; font-size: 12px; cursor: pointer; }
+.onboardingError { font-size: 12px; color: #ffd8dc !important; }
+.onboarding :is(input, button, a):focus-visible { outline: 2px solid #c5b6ff; outline-offset: 3px; }
+.onboarding h2:focus { outline: none; }
