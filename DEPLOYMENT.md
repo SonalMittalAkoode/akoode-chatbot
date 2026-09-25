@@ -15,7 +15,7 @@ does not replace values already compiled into browser JavaScript.
 
 ## Chatbot backend
 
-Deploy `backend` as an Express Vercel project. `app.js` exports the existing chatbot router
+The existing `akoode-chatbot-api` Vercel project is linked to the GitHub repository with root directory `backend` and Express framework. `app.js` exports the existing chatbot router
 and reuses MongoDB connections. `index.js` remains the existing long-running website server.
 The backend deployment must be reachable by the frontend server. Its chatbot endpoints
 require CHATBOT_PROXY_SECRET; do not put this secret in a NEXT_PUBLIC variable.
@@ -30,7 +30,7 @@ Set backend environment variables securely:
 
 Set frontend CHATBOT_BACKEND_URL to the deployed backend HTTPS URL plus `/chatbot`.
 The existing api.akoode.com host did not contain the chatbot routes when checked.
-The temporary frontend setting pointing there is not a working chatbot deployment.
+Use `https://akoode-chatbot-api.vercel.app/chatbot` once its deployment and Atlas network access have been verified.
 
 Atlas Cluster0 already contains the public knowledge index (537 pages, 8,963 chunks),
 chatbot indexes, and a database-scoped runtime user. Credentials are in ignored
@@ -51,7 +51,8 @@ configure an authenticated scheduled worker before relying on unattended deliver
 - Local Vercel backend entry against Atlas + real Gemini: create, answer, restore, delete passed.
 - Vercel deployment dpl_5DoCSZkNWPqqeQjV8xbz4NEAc43n was BLOCKED with TEAM_ACCESS_REQUIRED:
   the commit author needs permission to deploy to the M2 Method project.
-- Public deployment verification is pending that permission and Atlas network access.
+- Commit 91d2024 was deployed successfully through the verified SonalMittalAkoode GitHub integration. All five previously failing public API requests returned 200, and browser onboarding passed with no localhost requests.
+- Chatbot backend deployment and Vercel-to-Atlas network access verification remain pending.
 
 After deployment, verify website API requests return JSON without CSP/CORS errors;
 then run onboarding, message submission, close/reopen, and full reset in the live
